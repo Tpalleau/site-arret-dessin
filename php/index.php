@@ -23,7 +23,7 @@
         </nav>
         <footer>
             <p>Arret dessin </p>
-            <img src="logo.png" width="120" height="118">
+            <img src="..\dessin\logo.png" width="120" height="118">
         </footer>
     </body>
 </html>
