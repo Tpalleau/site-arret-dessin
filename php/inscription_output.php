@@ -1,17 +1,14 @@
 <?php
+echo $_POST["niveau"];
 $db = new PDO("mysql:host=localhost; dbname=dessin_bdd;charset=UTF8","root","");
 
 //verifie que l'utilsateur n'existe pas déjà
 $req_user_exist = $db->prepare("select * from utilisateur where
 email=? or
-nom=? or
-prenom=? or
 surnom=?"
 );
 $req_user_exist->execute(
     [$_POST["texte_email"],
-    $_POST["texte_nom"],
-    $_POST["texte_prenom"],
     $_POST["texte_surnom"]]
 );
 $user_exist = $req_user_exist->fetch();
