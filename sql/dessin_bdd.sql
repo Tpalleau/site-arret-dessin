@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 19 oct. 2021 à 14:50
+-- Généré le : mar. 19 oct. 2021 à 17:51
 -- Version du serveur : 10.4.21-MariaDB
 -- Version de PHP : 8.0.10
 
@@ -46,6 +46,17 @@ CREATE TABLE `nom_cours` (
   `nom` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `nom_cours`
+--
+
+INSERT INTO `nom_cours` (`id`, `nom`) VALUES
+(1, 'stickman'),
+(2, '3D stickman'),
+(3, 'bases solides'),
+(4, 'presqu\'artiste'),
+(5, 'artiste');
+
 -- --------------------------------------------------------
 
 --
@@ -56,6 +67,17 @@ CREATE TABLE `nom_niv` (
   `id` int(11) NOT NULL,
   `nom` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `nom_niv`
+--
+
+INSERT INTO `nom_niv` (`id`, `nom`) VALUES
+(1, 'Stickman'),
+(2, '3D Stickman'),
+(3, 'bases solides'),
+(4, 'presqu\'artiste'),
+(5, 'artiste');
 
 -- --------------------------------------------------------
 
@@ -136,13 +158,13 @@ ALTER TABLE `cours`
 -- AUTO_INCREMENT pour la table `nom_cours`
 --
 ALTER TABLE `nom_cours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `nom_niv`
 --
 ALTER TABLE `nom_niv`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateur`

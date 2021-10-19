@@ -24,9 +24,9 @@
                 <label for="niveau">Niveau de Dessin : </label>
                 <select name="niveau" id="niveau">
                     <option value="stickman">Stickman</option>
-                    <option value="3d_stickman">3D Stickman</option>
-                    <option value="bases_solides">Bases Solides</option>
-                    <option value="presqu_artiste">Presqu'Artiste</option>
+                    <option value="3D stickman">3D Stickman</option>
+                    <option value="bases solides">Bases Solides</option>
+                    <option value="presqu'artiste">Presqu'Artiste</option>
                     <option value="artiste">Artiste</option>
                 </select><br>
                 <label>
