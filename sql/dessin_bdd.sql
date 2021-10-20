@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 19 oct. 2021 à 17:51
+-- Généré le : mer. 20 oct. 2021 à 14:32
 -- Version du serveur : 10.4.21-MariaDB
 -- Version de PHP : 8.0.10
 
@@ -74,8 +74,8 @@ CREATE TABLE `nom_niv` (
 
 INSERT INTO `nom_niv` (`id`, `nom`) VALUES
 (1, 'Stickman'),
-(2, '3D Stickman'),
-(3, 'bases solides'),
+(2, '3D-Stickman'),
+(3, 'bases-solides'),
 (4, 'presqu\'artiste'),
 (5, 'artiste');
 
@@ -104,8 +104,18 @@ CREATE TABLE `utilisateur` (
   `prenom` varchar(20) NOT NULL,
   `niv_dessin` int(11) DEFAULT NULL,
   `admin` int(11) NOT NULL,
-  `passwd` varchar(40) NOT NULL
+  `passwd` varchar(40) NOT NULL,
+  `naissance` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id`, `email`, `surnom`, `nom`, `prenom`, `niv_dessin`, `admin`, `passwd`, `naissance`) VALUES
+(1, 'n@qsmdjf.com', 'MR_T', 'pal', 'tom', 1, 0, '$2y$10$XU0DoCxOqH7/oL/3Szulmef3seB2uHbSl', '2021-10-01'),
+(2, 'qn@qsmdjf.com', 'q', 'pale', 'q', 1, 0, '$2y$10$HCPw9FLElkqHh2gVDFFPXONc.Xo7z6SrC', '2021-10-01'),
+(9, 'qsdf@qsmdfj.cq', 'qsdf', 'qsdf', 'qsdf', 2, 0, '$2y$10$y1zDar9wIGxA37ecMeH.rOyD7otcl7jlz', '2021-10-08');
 
 --
 -- Index pour les tables déchargées
@@ -170,7 +180,7 @@ ALTER TABLE `nom_niv`
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Contraintes pour les tables déchargées

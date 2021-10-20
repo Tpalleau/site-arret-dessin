@@ -32,12 +32,7 @@
                     while ($name = $req_name_lvl->fetch())
                         echo "<option value=" . $name["nom"] . ">" . $name["nom"] . "</option>";
                     ?>
-
-<!--                    <option value="stickman">Stickman</option>-->
-<!--                    <option value="3D stickman">3D Stickman</option>-->
-<!--                    <option value="bases solides">Bases Solides</option>-->
-<!--                    <option value="presqu'artiste">Presqu'Artiste</option>-->
-<!--                    <option value="artiste">Artiste</option>-->
+                    
                 </select><br>
                 <label>
                     Date de Naissance : <input type="date" name="date_naissance" id="date_naissance" required="required">
