@@ -1,5 +1,4 @@
 <?php
-echo $_POST["niveau"];
 $db = new PDO("mysql:host=localhost; dbname=dessin_bdd;charset=UTF8","root","");
 
 //verifie que l'utilsateur n'existe pas déjà
@@ -35,7 +34,29 @@ if ($user_exist == NULL) {
             $_POST["date_naissance"],
             $_POST["niveau"]]
     );
-    echo 'user created';
+    ?>
+    <h4>felicitation vous êtes enregistré</h4>
+    <form action="index.php" method="post">
+        <label>
+            <input type="submit" value="retour à l'acceuil">
+        </label>
+    </form>
+
+<?php
 }else{
-    echo 'user already exists';
+    ?>
+    <h4>le surnom ou adresse mail est déjà utilisé</h4>
+    <form action="index.php" method="post">
+        <label>
+            <input type="submit" value="retour à l'acceuil">
+        </label>
+    </form>
+
+    <form action="inscription.php" method="post">
+        <label>
+            <input type="submit" value="s'inscrire">
+        </label>
+    </form>
+<?php
 }
+?>
