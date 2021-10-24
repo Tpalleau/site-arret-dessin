@@ -35,7 +35,7 @@ if ($user_exist == NULL) {
             $_POST["niveau"]]
     );
     ?>
-    <h4>felicitation vous êtes enregistré</h4>
+    <p>felicitation vous êtes enregistré</p>
     <form action="index.php" method="post">
         <label>
             <input type="submit" value="retour à l'acceuil">
@@ -45,7 +45,7 @@ if ($user_exist == NULL) {
 <?php
 }else{
     ?>
-    <h4>le surnom ou adresse mail est déjà utilisé</h4>
+    <p>le surnom ou adresse mail est déjà utilisé</p>
     <form action="index.php" method="post">
         <label>
             <input type="submit" value="retour à l'acceuil">

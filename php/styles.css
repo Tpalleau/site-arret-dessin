@@ -1,0 +1,89 @@
+body{
+    font-family: Rockwell;
+    font-size: 15px;
+    margin: 0px;
+    padding: 0px;
+    background-color: #F5F5F5;
+}
+
+footer{
+    height:50px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    text-align: center;
+    background-color: gold;
+}
+header{
+    height: 100px;
+    padding-top: 10px;
+    padding-bottom: 120px;
+    background-image: url("logotest.png");
+    background-repeat: no-repeat;
+    background-position-y: center;
+}
+
+h1{
+    font-size: 80px;
+    font-weight: bold;
+    text-align: center;
+}
+
+h2{
+    font-size: 40px;
+    text-align: center;
+}
+
+nav{
+    background-color: gray;
+}
+
+nav ul{
+    margin: 0px;
+    padding: 0px;
+}
+nav li{
+    list-style-type: none;
+    float: left;
+}
+nav li:hover{
+    border-top: 8px solid rgb(181 41 207);
+    background-color: rgba(181, 41, 207, 0.20);
+}
+nav li:hover a{
+    padding: 22px 30px 30px 30px;
+}
+
+nav a{
+    display: inline-block;
+    text-decoration: none;
+    padding: 30px 30px;
+    color: #FFF;
+    font-size: 20px;
+}
+
+.menu{
+    display: table;
+    margin: 0 auto;
+}
+
+form{
+
+    text-align: center;
+    font-size: 18px;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    max-width: 500px;
+    margin: 10px auto;
+}
+.formulaire{
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+label{
+    text-align: center;
+}
+
+.submit{
+
+}

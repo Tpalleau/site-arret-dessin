@@ -2,27 +2,41 @@
     <head>
         <title>Connexion</title>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
     <header>
         <h1> ARRET DESSIN </h1>
     </header>
     <nav>
+        <div class="menu">
+            <ul>
+                <li> <a href="inscription.php">S'Inscrire</a> </li>
+                <li> <a href="connexion.php">Connexion</a> </li>
+                <li> <a href="cours.php">Cours</a> </li>
+                <li> <a href="dessins.php">Dessins</a> </li>
+                <li> <a href="demande.php">Demande au club</a> </li> <!-- demande materiel, cours ou autre -->
+            </ul>
+        </div>
+    </nav>
+    <div class="formulaire">
         <form>
+            <h2>Se Connecter</h2>
             <label>
-                Email : <input type="email" name="texte_email" id="texte_email" placeholder="exemple@mail.fr" required="required">
+                <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="Email" required="required">
+            </label>
+            <label>
+                <input class="texte" type="password" name="mdp" id="mdp" placeholder="Mot de Passe" required="required">
             </label><br>
+            <p>Vous n'avez pas de compte ? Inscrivez-vous <a href="inscription.php">ici</a></p>
             <label>
-                Mot de Passe : <input type="password" name="mdp" id="mdp" required="required">
-            </label><br>
-            <label>
-                <input type="submit" value="Se connecter">
+                <input class="submit" type="submit" value="Se connecter">
             </label>
         </form>
-    </nav>
+    </div>
+
     <footer>
     <p>Arret dessin </p>
-        <img src="logo.png" width="120" height="118">
     </footer>
     </body>
 </html>
