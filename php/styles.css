@@ -22,6 +22,7 @@ header{
     background-position-y: center;
 }
 
+
 h1{
     font-size: 80px;
     font-weight: bold;
@@ -67,7 +68,6 @@ nav a{
 }
 
 form{
-
     text-align: center;
     font-size: 18px;
     align-items: center;
@@ -79,11 +79,36 @@ form{
 .formulaire{
     padding-top: 40px;
     padding-bottom: 60px;
+    background-image: url("mascotte.png");
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: turquoise;
 }
 label{
     text-align: center;
 }
 
-.submit{
+.texte{
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #F5F5F5;
+}
 
+.texte:hover{
+    background-color: rgba(181, 41, 207, 0.20);
+}
+
+.submit{
+    margin: 30px;
+    padding: 20px 40px 20px 40px;
+    background-color: #F5F5F5;
+    border-style: none;
+    font-size: 16px;
+    border-radius: 15px;
+}
+
+.submit:hover{
+    background-color: rgb(252 124 97);
 }
