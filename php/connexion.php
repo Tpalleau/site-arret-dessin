@@ -19,8 +19,13 @@
             </ul>
         </div>
     </nav>
+    <?php
+    if (isset($_GET["error"]) && $_GET["error"]=="connexion"){
+        echo "<p>email ou mot de passe faux</p>";
+    }
+    ?>
     <div class="formulaire">
-        <form>
+        <form method="post" action="connexion_output.php">
             <h2>Se Connecter</h2>
             <label>
                 <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="Email" required="required">
