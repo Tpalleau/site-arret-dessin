@@ -23,14 +23,14 @@ if ($user_exist == NULL) {
                             passwd,
                             naissance,
                             niv_dessin
-    ) values (?,?,?,?,?,?, (select id from nom_niv where nom=?))");
+    ) values (?,?,?,?,password(?),?, (select id from nom_niv where nom=?))");
 
     $add_user->execute(
         [$_POST["texte_email"],
             $_POST["texte_surnom"],
             $_POST["texte_nom"],
             $_POST["texte_prenom"],
-            password_hash($_POST["mdp"], PASSWORD_DEFAULT),
+            $_POST["mdp"],
             $_POST["date_naissance"],
             $_POST["niveau"]]
     );
