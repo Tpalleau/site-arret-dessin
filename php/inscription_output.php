@@ -34,29 +34,7 @@ if ($user_exist == NULL) {
             $_POST["date_naissance"],
             $_POST["niveau"]]
     );
-    ?>
-    <p>felicitation vous êtes enregistré</p>
-    <form action="index.php" method="post">
-        <label>
-            <input type="submit" value="retour à l'acceuil">
-        </label>
-    </form>
-
-<?php
+    header("location: index.php");
 }else{
-    ?>
-    <p>le surnom ou adresse mail est déjà utilisé</p>
-    <form action="index.php" method="post">
-        <label>
-            <input type="submit" value="retour à l'acceuil">
-        </label>
-    </form>
-
-    <form action="inscription.php" method="post">
-        <label>
-            <input type="submit" value="s'inscrire">
-        </label>
-    </form>
-<?php
+    header("location: inscription.php?error=inscription");
 }
-?>

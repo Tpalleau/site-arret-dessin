@@ -1,6 +1,6 @@
 <html lang="fr">
 <?php
-session_start();
+//session_start();
 ?>
     <head>
         <title>Index</title>

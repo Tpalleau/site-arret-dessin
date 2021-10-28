@@ -8,6 +8,11 @@
         <header>
             <h1> ARRET DESSIN </h1>
         </header>
+        <?php
+        if (isset($_GET["error"])){
+            echo "<p>email ou surnom déjà utilisé</p>";
+        }
+        ?>
         <nav>
             <div class="menu">
                 <ul>
