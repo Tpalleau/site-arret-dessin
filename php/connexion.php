@@ -25,7 +25,7 @@
     }
     ?>
     <div class="formulaire">
-        <form method="post" action="connexion_output.php">
+        <form method="post" action="connexion_output.php?connect=true">
             <h2>Se Connecter</h2>
             <label>
                 <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="Email" required="required">
