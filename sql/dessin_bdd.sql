@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 25 oct. 2021 à 14:55
--- Version du serveur :  10.4.13-MariaDB
--- Version de PHP : 7.4.7
+-- Généré le : jeu. 28 oct. 2021 à 23:28
+-- Version du serveur : 10.4.21-MariaDB
+-- Version de PHP : 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,18 @@ CREATE TABLE `cours` (
   `nb_place` int(11) NOT NULL,
   `jour_heur` datetime NOT NULL,
   `salle` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cours_bloque`
+--
+
+CREATE TABLE `cours_bloque` (
+  `id_bloquage` int(11) NOT NULL,
+  `horaire` datetime NOT NULL,
+  `id_cour` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -117,7 +129,7 @@ CREATE TABLE `utilisateur` (
   `prenom` varchar(20) NOT NULL,
   `niv_dessin` int(11) DEFAULT NULL,
   `admin` int(11) NOT NULL,
-  `passwd` varchar(40) NOT NULL,
+  `passwd` varchar(100) NOT NULL,
   `naissance` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -126,9 +138,7 @@ CREATE TABLE `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`id`, `email`, `surnom`, `nom`, `prenom`, `niv_dessin`, `admin`, `passwd`, `naissance`) VALUES
-(1, 'n@qsmdjf.com', 'MR_T', 'pal', 'tom', 1, 0, '$2y$10$XU0DoCxOqH7/oL/3Szulmef3seB2uHbSl', '2021-10-01'),
-(2, 'qn@qsmdjf.com', 'q', 'pale', 'q', 1, 0, '$2y$10$HCPw9FLElkqHh2gVDFFPXONc.Xo7z6SrC', '2021-10-01'),
-(9, 'qsdf@qsmdfj.cq', 'qsdf', 'qsdf', 'qsdf', 2, 0, '$2y$10$y1zDar9wIGxA37ecMeH.rOyD7otcl7jlz', '2021-10-08');
+(14, 'root@gmail.com', 'root', 'root', 'root', 1, 0, '*9CFBBC772F3F6C106020035386DA5BBBF1249A11', '0001-11-11');
 
 --
 -- Index pour les tables déchargées
@@ -140,6 +150,13 @@ INSERT INTO `utilisateur` (`id`, `email`, `surnom`, `nom`, `prenom`, `niv_dessin
 ALTER TABLE `cours`
   ADD PRIMARY KEY (`id`),
   ADD KEY `nom` (`nom`);
+
+--
+-- Index pour la table `cours_bloque`
+--
+ALTER TABLE `cours_bloque`
+  ADD PRIMARY KEY (`id_bloquage`),
+  ADD KEY `id_cour` (`id_cour`);
 
 --
 -- Index pour la table `nom_cours`
@@ -185,6 +202,12 @@ ALTER TABLE `cours`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT pour la table `cours_bloque`
+--
+ALTER TABLE `cours_bloque`
+  MODIFY `id_bloquage` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `nom_cours`
 --
 ALTER TABLE `nom_cours`
@@ -206,7 +229,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Contraintes pour les tables déchargées
@@ -217,6 +240,12 @@ ALTER TABLE `utilisateur`
 --
 ALTER TABLE `cours`
   ADD CONSTRAINT `cours_ibfk_1` FOREIGN KEY (`nom`) REFERENCES `nom_cours` (`id`);
+
+--
+-- Contraintes pour la table `cours_bloque`
+--
+ALTER TABLE `cours_bloque`
+  ADD CONSTRAINT `cours_bloque_ibfk_1` FOREIGN KEY (`id_cour`) REFERENCES `cours` (`id`);
 
 --
 -- Contraintes pour la table `post`
