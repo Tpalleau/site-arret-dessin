@@ -47,8 +47,9 @@
                     $req_name_lvl = $db->prepare("select nom from nom_niv");
                     $req_name_lvl->execute();
 
-                    while ($name = $req_name_lvl->fetch())
+                    while ($name = $req_name_lvl->fetch()) {
                         echo "<option value=" . $name["nom"] . ">" . $name["nom"] . "</option>";
+                    }
                     ?>
                     
                 </select><br>
