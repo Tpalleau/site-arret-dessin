@@ -36,7 +36,7 @@ session_start();
         <h2>cours</h2>
         <label for="cour">cour : </label>
         <select name="cour" id="cour">
-            <option value="*">tout</option>
+            <option value="">tout</option>
 
             <?php
             $db = new PDO("mysql:host=localhost;dbname=dessin_bdd;charset=UTF8","root","");
@@ -49,12 +49,13 @@ session_start();
 
         </select>
         <label>
-            date : <input type="date" name="date_cour" id="date_cour" required="required" min="<?= date('Y-m-d'); ?>">
+            date : <input type="date" name="date_cour" id="date_cour" value="*" min="<?= date('Y-m-d'); ?>">
         </label>
 
-        <label for="time">heure </label>
-        <select name="time" id="time">
+        <label for="heur_cour">heure </label>
+        <select name="heur_cour" id="heur_cour">
 
+            <option value=""> </option>
             <?php
             for ($heure=8; $heure<=18; ++$heure){
                 if ($heure!=12){
@@ -71,19 +72,52 @@ session_start();
 </div>
 <?php
 if (isset($_GET["search"])){
-    $req_cour_nom->execute();
-    $req_cour_size = $db->prepare("select nb_place from cours where nom=?");
 
-    while ($name = $req_cour_nom->fetch()) {
-        //recup de la taille selon le cour
-            $req_cour_size->execute([$name["id"]]);
+    $prepare = "";
 
-            //si des utilisateurs se sont déjà inscrit au cours
-            if ($size = $req_cour_size->fetch()) {
-                echo "<p>" . $name["nom"] . $size["nb_place"] . "/25 participant</p>";
-            }else{ //si aucun utilisateurs n'est inscrit
-                echo "<p>" . $name["nom"] ." 0/25 participant</p>";
+    $need_and=0;
+    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heur_cour"]){//si une condition est demandé
+        $prepare=$prepare."where";//ajouter where
+        if ($_GET["cour"]){
+            $prepare=$prepare." nom=".$_GET["cour"];
+            $need_and=1;
+        }if ($_GET["date_cour"]){
+            if ($need_and){//si condition avant celle ci
+                $prepare=$prepare." and ";
             }
+            $need_and=1;
+
+            $prepare=$prepare.' jour="'.$_GET["date_cour"].'"';
+
+        }if ($_GET["heur_cour"]){
+            if ($need_and){//si condition avant celle ci
+                $prepare=$prepare." and ";
+            }
+
+            $prepare=$prepare.' heur="'.$_GET["heur_cour"].':00:00"';
+        }else{
+            $time="";
+        }
+    }
+    //recup le nom du cours
+    $req_cour=$db->prepare("select nom from nom_cours where id=(select nom from cours ".$prepare.")");
+    //recup toute les infos sur ce cours
+    $req_cour_info=$db->prepare("select id,salle,nb_place,jour,heur from cours".$prepare);
+    //recup le nombre de participant
+    $req_participant=$db->prepare("select count(utilisateur) as participe from reservation where cours=?");
+
+    $req_cour->execute();
+    $req_cour_info->execute();
+
+    while ($cour = $req_cour->fetch()){
+        $cour_info=$req_cour_info->fetch();
+        $req_participant->execute([$cour_info["id"]]);
+        if (!($particpant = $req_participant->fetch())){
+            $particpant["utilisateur"]=0;//si aucun utilisateur ne participe alors la veleur est 0
+        }
+        echo "<p>".$cour["nom"]."   ".$cour_info["jour"]."   "
+            .$cour_info["heur"]."H   ".$cour_info["salle"]."   ".$particpant["participe"].
+            "/".$cour_info["nb_place"]."</p><br>";
     }
 }
 ?>
