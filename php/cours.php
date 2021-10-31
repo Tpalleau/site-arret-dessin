@@ -102,22 +102,43 @@ if (isset($_GET["search"])){
     //recup le nom du cours
     $req_cour=$db->prepare("select nom from nom_cours where id=(select nom from cours ".$prepare.")");
     //recup toute les infos sur ce cours
-    $req_cour_info=$db->prepare("select id,salle,nb_place,jour,heur from cours ".$prepare);
+    $req_cour_info=$db->prepare("select id,nom ,salle,nb_place,jour,heur from cours ".$prepare);
     //recup le nombre de participant
     $req_participant=$db->prepare("select count(utilisateur) as participe from reservation where cours=?");
 
     $req_cour->execute();
     $req_cour_info->execute();
+    $req_cour_nom->execute();
+    $pas_cour = $req_cour_nom->fetchAll(PDO::FETCH_COLUMN, 1); //utiliser pour savoir quel cour n'aura pas lieu
 
     while ($cour = $req_cour->fetch()){
+
         $cour_info=$req_cour_info->fetch();
         $req_participant->execute([$cour_info["id"]]);
+
         if (!($particpant = $req_participant->fetch())){
             $particpant["utilisateur"]=0;//si aucun utilisateur ne participe alors la veleur est 0
         }
+        //affiche nom/jour/heur/salle/nb participant/nb place
         echo "<p>".$cour["nom"]."   ".$cour_info["jour"]."   "
             .$cour_info["heur"]."H   ".$cour_info["salle"]."   ".$particpant["participe"].
             "/".$cour_info["nb_place"]."</p><br>";
+
+        $key = array_search($cour_info["nom"], $pas_cour);
+        if ($key !==NULL){
+            unset($pas_cour[$key]);
+        }
+    }
+
+    if ($_GET["date_cour"] && $_GET["heur_cour"] && isset($_SESSION["admin"])){
+        echo "\n---------------------------------------------\r\n";
+        $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
+        foreach ($pas_cour as $id_cour){
+            $req_cour_nom->execute([$id_cour]);
+            $nom = $req_cour_nom->fetch();
+            echo "<p>".$nom["nom"]."   ".$_GET["date_cour"]."   "
+                .$_GET["heur_cour"]."H</p>";
+        }
     }
 }
 ?>
