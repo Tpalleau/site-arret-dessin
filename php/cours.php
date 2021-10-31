@@ -102,7 +102,7 @@ if (isset($_GET["search"])){
     //recup le nom du cours
     $req_cour=$db->prepare("select nom from nom_cours where id=(select nom from cours ".$prepare.")");
     //recup toute les infos sur ce cours
-    $req_cour_info=$db->prepare("select id,salle,nb_place,jour,heur from cours".$prepare);
+    $req_cour_info=$db->prepare("select id,salle,nb_place,jour,heur from cours ".$prepare);
     //recup le nombre de participant
     $req_participant=$db->prepare("select count(utilisateur) as participe from reservation where cours=?");
 
