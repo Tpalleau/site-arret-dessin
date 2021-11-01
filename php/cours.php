@@ -52,8 +52,8 @@ session_start();
             date : <input type="date" name="date_cour" id="date_cour" value="*" min="<?= date('Y-m-d'); ?>">
         </label>
 
-        <label for="heur_cour">heure </label>
-        <select name="heur_cour" id="heur_cour">
+        <label for="heure_cour">heure </label>
+        <select name="heure_cour" id="heure_cour">
 
             <option value=""> </option>
             <?php
@@ -71,75 +71,93 @@ session_start();
     </form>
 </div>
 <?php
-if (isset($_GET["search"])){
+//cherche selon type cour date et jour
+if (isset($_GET["search"])) {
 
     $prepare = "";
 
-    $need_and=0;
-    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heur_cour"]){//si une condition est demandé
-        $prepare=$prepare."where";//ajouter where
-        if ($_GET["cour"]){
-            $prepare=$prepare." nom=".$_GET["cour"];
-            $need_and=1;
-        }if ($_GET["date_cour"]){
-            if ($need_and){//si condition avant celle ci
-                $prepare=$prepare." and ";
+    $need_and = 0;
+    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heure_cour"]) {//si une condition est demandé
+        $prepare = $prepare . "where";//ajouter where
+        if ($_GET["cour"]) {
+            $prepare = $prepare . " nom=" . $_GET["cour"];
+            $need_and = 1;
+        }
+        if ($_GET["date_cour"]) {
+            if ($need_and) {//si condition avant celle ci
+                $prepare = $prepare . " and ";
             }
-            $need_and=1;
+            $need_and = 1;
 
-            $prepare=$prepare.' jour="'.$_GET["date_cour"].'"';
+            $prepare = $prepare . ' jour="' . $_GET["date_cour"] . '"';
 
-        }if ($_GET["heur_cour"]){
-            if ($need_and){//si condition avant celle ci
-                $prepare=$prepare." and ";
+        }
+        if ($_GET["heure_cour"]) {
+            if ($need_and) {//si condition avant celle ci
+                $prepare = $prepare . " and ";
             }
 
-            $prepare=$prepare.' heur="'.$_GET["heur_cour"].':00:00"';
-        }else{
-            $time="";
+            $prepare = $prepare . ' heure="' . $_GET["heure_cour"] . ':00:00"';
+        } else {
+            $time = "";
         }
     }
-    //recup le nom du cours
-    $req_cour=$db->prepare("select nom from nom_cours where id=(select nom from cours ".$prepare.")");
     //recup toute les infos sur ce cours
-    $req_cour_info=$db->prepare("select id,nom ,salle,nb_place,jour,heur from cours ".$prepare);
+    $req_cour_info = $db->prepare("select id,nom ,salle,nb_place,jour,heure from cours " . $prepare);
+    //recup le nom du cours
+    $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
     //recup le nombre de participant
-    $req_participant=$db->prepare("select count(utilisateur) as participe from reservation where cours=?");
+    $req_participant = $db->prepare("select count(utilisateur) as participe  from reservation where cours=?");
 
-    $req_cour->execute();
     $req_cour_info->execute();
-    $req_cour_nom->execute();
-    $pas_cour = $req_cour_nom->fetchAll(PDO::FETCH_COLUMN, 1); //utiliser pour savoir quel cour n'aura pas lieu
+    $cour_existe=[];
 
-    while ($cour = $req_cour->fetch()){
+    while ($cour = $req_cour_info->fetch()) {
+        $req_cour_nom->execute([$cour["nom"]]); //recup nom du cour
+        $req_participant->execute([$cour["id"]]);
 
-        $cour_info=$req_cour_info->fetch();
-        $req_participant->execute([$cour_info["id"]]);
+        $cour_nom = $req_cour_nom->fetch();
+        $particpant = $req_participant->fetch();
 
-        if (!($particpant = $req_participant->fetch())){
-            $particpant["utilisateur"]=0;//si aucun utilisateur ne participe alors la veleur est 0
-        }
-        //affiche nom/jour/heur/salle/nb participant/nb place
-        echo "<p>".$cour["nom"]."   ".$cour_info["jour"]."   "
-            .$cour_info["heur"]."H   ".$cour_info["salle"]."   ".$particpant["participe"].
-            "/".$cour_info["nb_place"]."</p><br>";
+        array_push($cour_existe, $cour["nom"]);
 
-        $key = array_search($cour_info["nom"], $pas_cour);
-        if ($key !==NULL){
-            unset($pas_cour[$key]);
-        }
+        //affiche nom/jour/heure/salle/nb participant/nb place
+        echo $cour_nom["nom"]." ".$cour["jour"]." "
+            .$cour["heure"]."H ".$cour["salle"]." ".$particpant["participe"].
+            "/".$cour["nb_place"]."<br>";
+
+
     }
-
-    if ($_GET["date_cour"] && $_GET["heur_cour"] && isset($_SESSION["admin"])){
-        echo "\n---------------------------------------------\r\n";
-        $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
-        foreach ($pas_cour as $id_cour){
-            $req_cour_nom->execute([$id_cour]);
-            $nom = $req_cour_nom->fetch();
-            echo "<p>".$nom["nom"]."   ".$_GET["date_cour"]."   "
-                .$_GET["heur_cour"]."H</p>";
+    //si root, (date et heure) specifier afiche cours que l'on peut ajouter
+    if ($date=$_GET["date_cour"] && $heure=$_GET["heure_cour"] && isset($_SESSION["admin"])) {
+        if ($cour_existe==[]){
+            $req_cour_existe_pas = $db->prepare("select id from nom_cours");
+        }else{
+            $req_cour_existe_pas = $db->prepare("select id from nom_cours 
+        where id not in (" . implode(",", $cour_existe) . ")");
         }
+
+        $req_cour_existe_pas->execute();
+
+        echo "<form>salle: <input type='text' name='salle' required='required'><br>";
+        echo "nombre d'élève: <input type='number' name='nb_place' required='required'><br><br>";
+        while ($cour = $req_cour_existe_pas->fetch()){
+            $req_cour_nom->execute([$cour["id"]]);
+            $cour_nom = $req_cour_nom->fetch();
+            echo $cour_nom["nom"] . "   " . $_GET["date_cour"] . "   "
+                . $_GET["heure_cour"] . "H";
+            echo "<button type='submit' name='ajout_cour' value='".$cour["id"]."'>creer</button><br>";
+        }
+        echo "</form>";
     }
+}
+
+//ajout du cour
+if (isset($_GET["ajout_cour"])){
+            $req_ajout_cour=$db->prepare("insert into cours(nom, salle, nb_place, jour, heure)
+ VALUES (? ,? ,? ,? ,?)");
+            $req_ajout_cour->execute([$_GET["ajout_cour"],$_GET["salle"], $_GET["nb_place"], $date, $_GET["heure_cour"]]);
+
 }
 ?>
 <footer>
