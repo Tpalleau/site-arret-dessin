@@ -139,8 +139,12 @@ if (isset($_GET["search"])) {
 
         $req_cour_existe_pas->execute();
 
-        echo "<form>salle: <input type='text' name='salle' required='required'><br>";
+        echo "<form action=''>".$_GET["date_cour"]." | ".$_GET["heure_cour"]."H "."<br>";
+        echo " salle: <input type='text' name='salle' required='required'><br>";
         echo "nombre d'élève: <input type='number' name='nb_place' required='required'><br><br>";
+        echo "<input type='hidden' name='date' value=".$_GET['date_cour'].">";
+        echo "<input type='hidden' name='heure' value=".$_GET['heure_cour'].">";
+
         while ($cour = $req_cour_existe_pas->fetch()){
             $req_cour_nom->execute([$cour["id"]]);
             $cour_nom = $req_cour_nom->fetch();
@@ -156,7 +160,7 @@ if (isset($_GET["search"])) {
 if (isset($_GET["ajout_cour"])){
             $req_ajout_cour=$db->prepare("insert into cours(nom, salle, nb_place, jour, heure)
  VALUES (? ,? ,? ,? ,?)");
-            $req_ajout_cour->execute([$_GET["ajout_cour"],$_GET["salle"], $_GET["nb_place"], $date, $_GET["heure_cour"]]);
+            $req_ajout_cour->execute([$_GET["ajout_cour"],$_GET["salle"], $_GET["nb_place"], $_GET["date"], $_GET["heure"].":00:00" ]);
 
 }
 ?>

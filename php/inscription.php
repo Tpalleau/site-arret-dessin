@@ -34,7 +34,7 @@
                     Prenom : <input class="texte" type="text" name="texte_prenom" id="texte_prenom" required="required">
                 </label><br>
                 <label>
-                    Surnom : <input class="texte" type="text" name="texte_surnom" id="texte_surnom" placeholder="surnom UTBM" required="required">
+                    Surnom : <input class="texte" type="text" name="texte_surnom" id="texte_surnom" placeholder="surnom UTBM">
                 </label><br>
                 <label>
                     Email : <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="exemple@mail.fr" required="required">
