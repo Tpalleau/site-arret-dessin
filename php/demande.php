@@ -21,7 +21,7 @@ session_start();
                 <li> <a href="connexion.php">Connexion</a> </li>
                 <?php
             }else{ ?>
-                <li> <a href="connexion_output.php?connect=false">deconnnexion</a> </li>
+                <li> <a href="connexion_output.php?connect=false">Deconnnexion</a> </li>
 
                 <?php
             } ?>
@@ -31,6 +31,33 @@ session_start();
         </ul>
     </div>
 </nav>
+<div class="formulaire">
+    <form method="post" action="envoie_mail.php">
+        <h2>Demande au Club</h2>
+        <label>
+            Nom : <input class="texte" type="text" name="texte_nom" id="texte_nom" required="required">
+        </label>
+        <label>
+            Prénom : <input class="texte" type="text" name="texte_prenom" id="texte_prenom" required="required">
+        </label><br>
+        <label>
+            Votre email : <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="Email" required="required">
+        </label><br>
+        <label for="demande"> Votre demande au club :</label>
+        <select name="demande" id="demande">
+            <option value="materiel">Demande de matériel</option>
+            <option value="cours">Demande de cours</option>
+            <option value="autre">Autre demande</option>
+        </select><br>
+        <label>
+            Détaillez votre demande ici :<br>
+            <textarea cols="70" rows="10" name="message"></textarea>
+        </label><br>
+        <label>
+            <input class="submit" type="submit" value="Envoyer">
+        </label>
+    </form>
+</div>
 <footer>
     <p>Arret dessin </p>
 </footer>

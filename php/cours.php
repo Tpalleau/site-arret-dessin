@@ -21,7 +21,7 @@ session_start();
                 <li> <a href="connexion.php">Connexion</a> </li>
                 <?php
             }else{ ?>
-                <li> <a href="connexion_output.php?connect=false">deconnnexion</a> </li>
+                <li> <a href="connexion_output.php?connect=false">Deconnnexion</a> </li>
 
                 <?php
             } ?>
@@ -31,9 +31,9 @@ session_start();
         </ul>
     </div>
 </nav>
-<div class="recherche_cours">
+<div class="formulaire">
     <form>
-        <h2>cours</h2>
+        <h2>Cours</h2>
         <label for="cour">cour : </label>
         <select name="cour" id="cour">
             <option value="">tout</option>
@@ -49,7 +49,7 @@ session_start();
 
         </select>
         <label>
-            date : <input type="date" name="date_cour" id="date_cour" value="*" min="<?= date('Y-m-d'); ?>">
+            date : <input class="date" type="date" name="date_cour" id="date_cour" value="*" min="<?= date('Y-m-d'); ?>">
         </label>
 
         <label for="heure_cour">heure </label>
@@ -66,7 +66,7 @@ session_start();
 
         </select><br>
         <label>
-            <input type="submit" id="search" name="search" value="search" />
+            <input class="submit" type="submit" id="search" name="search" value="Rechercher" />
         </label>
     </form>
 </div>
@@ -126,9 +126,9 @@ if (isset($_GET["search"])) {
         echo $cour_nom["nom"] . " " . $cour["jour"] . " "
             . $cour["heure"] . "H " . $cour["salle"] . " " . $particpant["participe"] .
             "/" . $cour["nb_place"];
-        echo " <button type='submit' name='rejoindre' value=".$cour["id"].">participer</button>";
+        echo " <button class='bouton' type='submit' name='rejoindre' value=".$cour["id"].">participer</button>";
         if (isset($_SESSION["admin"])) {
-            echo "<button type='submit' name='suppr' value=".$cour["id"].">SUPPR</button>";
+            echo "<button class='bouton' type='submit' name='suppr' value=".$cour["id"].">SUPPR</button>";
         }
         echo "<br><br>";
     }
@@ -171,10 +171,8 @@ if (isset($_GET["rejoindre"])){
 }
 //suppression cour
 elseif (isset($_GET["suppr"])){
-    $req_suppr_participant= $db->prepare("delete from reservation where id_cour=?");
-    $req_suppr_cour = $db->prepare("delete from cours where id=?");
-    $req_suppr_participant->execute([$_GET["suppr"]]);
-    $req_suppr_cour->execute([$_GET["suppr"]]);
+    $req_supr_cour = $db->prepare("delete from cours where id=?");
+    $req_supr_cour->execute([$_GET["suppr"]]);
 }
 //ajout cour
 elseif (isset($_GET["ajout_cour"])){

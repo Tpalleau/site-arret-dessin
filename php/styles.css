@@ -17,7 +17,7 @@ header{
     height: 100px;
     padding-top: 10px;
     padding-bottom: 120px;
-    background-image: url("logotest.png");
+    background-image: url("../image/logotest.png");
     background-repeat: no-repeat;
     background-position-y: center;
 }
@@ -73,13 +73,13 @@ form{
     align-items: center;
     border-radius: 15px;
     background-color: #FFFFFF;
-    max-width: 500px;
+    max-width: 700px;
     margin: 10px auto;
 }
 .formulaire{
     padding-top: 40px;
     padding-bottom: 60px;
-    background-image: url("mascotte.png");
+    background-image: url("../image/mascotte.png");
     background-repeat: no-repeat;
     background-position: right;
     background-color: turquoise;
@@ -111,4 +111,51 @@ label{
 
 .submit:hover{
     background-color: rgb(252 124 97);
+}
+
+select{
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #F5F5F5;
+}
+
+select:hover{
+    background-color: rgba(181, 41, 207, 0.20);
+}
+
+.date{
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #F5F5F5;
+}
+
+.date:hover{
+    background-color: rgba(181, 41, 207, 0.20);
+}
+
+.bouton{
+    margin: 10px;
+    padding: 5px;
+    border-radius: 6px;
+    border-style: solid;
+    background-color: #F5F5F5;
+
+}
+
+.bouton:hover{
+    background-color: gold;
+}
+
+textarea{
+    font-size: 15px;
+    margin: 10px;
+    padding: 5px;
+    background-color: #F5F5F5;
+    border-radius: 6px;
+    border-style: none;
+
 }

@@ -54,7 +54,7 @@
                     
                 </select><br>
                 <label>
-                    Date de Naissance : <input type="date" name="date_naissance" id="date_naissance" required="required">
+                    Date de Naissance : <input class="date" type="date" name="date_naissance" id="date_naissance" required="required">
                 </label><br>
                 <label>
                     Mot de Passe : <input class="texte" type="password" name="mdp" id="mdp" required="required">
