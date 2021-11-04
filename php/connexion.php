@@ -29,10 +29,10 @@
         <form method="post" action="connexion_output.php?connect=true">
             <h2>Se Connecter</h2>
             <label>
-                <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="Email" required="required">
+                <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="Email" required="required" size="30">
             </label>
             <label>
-                <input class="texte" type="password" name="mdp" id="mdp" placeholder="Mot de Passe" required="required">
+                <input class="texte" type="password" name="mdp" id="mdp" placeholder="Mot de Passe" required="required" size="30">
             </label><br>
             <p>Vous n'avez pas de compte ? Inscrivez-vous <a href="inscription.php">ici</a></p>
             <label>

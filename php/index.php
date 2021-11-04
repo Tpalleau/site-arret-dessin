@@ -32,6 +32,9 @@ session_start();
                 </ul>
             </div>
         </nav>
+        <div>
+            <h2>Bienvenue sur le site du club Arret Dessin!</h2>
+        </div>
         <footer>
             <p>Arret dessin </p>
         </footer>

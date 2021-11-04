@@ -73,9 +73,21 @@ form{
     align-items: center;
     border-radius: 15px;
     background-color: #FFFFFF;
-    max-width: 700px;
+    max-width: 800px;
     margin: 10px auto;
 }
+
+.cours{
+    text-align: center;
+    font-size: 18px;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    max-width: 1000px;
+    margin: 10px auto;
+}
+
+
 .formulaire{
     padding-top: 40px;
     padding-bottom: 60px;
@@ -137,17 +149,43 @@ select:hover{
     background-color: rgba(181, 41, 207, 0.20);
 }
 
-.bouton{
-    margin: 10px;
+.bouton_rejoindre{
+    margin: 4px;
     padding: 5px;
     border-radius: 6px;
-    border-style: solid;
-    background-color: #F5F5F5;
+    border: 1px solid;
+    background-color: limegreen;
 
 }
 
-.bouton:hover{
-    background-color: gold;
+.bouton_rejoindre:hover{
+    background-color: greenyellow;
+}
+
+.bouton_quitter{
+    margin: 4px;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid;
+    background-color: darkorange;
+
+}
+
+.bouton_quitter:hover{
+    background-color: orange;
+}
+
+.bouton_suppr{
+    margin: 4px;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid;
+    background-color: indianred;
+
+}
+
+.bouton_suppr:hover{
+    background-color: red;
 }
 
 textarea{
@@ -159,3 +197,26 @@ textarea{
     border-style: none;
 
 }
+
+table{
+    text-align: center;
+    font-size: 18px;
+    align-items: center;
+    border-radius: 15px;
+    max-width: 1000px;
+    margin: 10px auto;
+}
+
+th{
+    padding: 10px;
+    border: 1px solid;
+}
+
+.haut{
+    border: 2px solid;
+}
+
+.hors_tableau{
+    border-style: none;
+}
+

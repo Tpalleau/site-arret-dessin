@@ -29,16 +29,16 @@
             <form action="inscription_output.php" method="post">
                 <h2>S'Inscrire</h2>
                 <label>
-                    Nom : <input class="texte" type="text" name="texte_nom" id="texte_nom" required="required">
+                    Nom : <input class="texte" type="text" name="texte_nom" id="texte_nom" required="required" size="30">
                 </label> <br/>
                 <label>
-                    Prenom : <input class="texte" type="text" name="texte_prenom" id="texte_prenom" required="required">
+                    Prenom : <input class="texte" type="text" name="texte_prenom" id="texte_prenom" required="required" size="30">
                 </label><br>
                 <label>
-                    Surnom : <input class="texte" type="text" name="texte_surnom" id="texte_surnom" placeholder="surnom UTBM">
+                    Surnom : <input class="texte" type="text" name="texte_surnom" id="texte_surnom" placeholder="surnom UTBM" size="30">
                 </label><br>
                 <label>
-                    Email : <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="exemple@mail.fr" required="required">
+                    Email : <input class="texte" type="email" name="texte_email" id="texte_email" placeholder="exemple@mail.fr" required="required" size="30">
                 </label><br>
                 <label for="niveau">Niveau de Dessin : </label>
                 <select name="niveau" id="niveau">
@@ -58,7 +58,7 @@
                     Date de Naissance : <input class="date" type="date" name="date_naissance" id="date_naissance" required="required">
                 </label><br>
                 <label>
-                    Mot de Passe : <input class="texte" type="password" name="mdp" id="mdp" required="required">
+                    Mot de Passe : <input class="texte" type="password" name="mdp" id="mdp" required="required" size="30">
                 </label><br>
                 <label>
                     <input class = "submit" type="submit" value="S'inscrire">
