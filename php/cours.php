@@ -143,13 +143,13 @@ if (isset($_GET["search"])) {
             "/" . $cour["nb_place"];
 
 
+        // verifie si on participe déjà à un cour sur le meme crenaux
+        $participe_deja_creneau = array_filter($jour_heure_utiliser, function($val) use($cour){
+        return ($val["jour"]==$cour["jour"] and $val["heure"]==$cour["heure"]); });
 
-        $participe_deja_crenaux = array_filter($jour_heure_utiliser, function($val) use($cour){
-        return ($val["jour"]==$cour["jour"] and $val["heure"]==$cour["heure"]);
-            });
+        $complet = $particpant["participe"]>= $cour["nb_place"];
 
-        //si utiliser est connecter et il n'est pas inscrit à un cours le meme jour et heure alors il peut s'y inscrire
-        if (isset($_SESSION["connected"]) && !$participe_deja_crenaux){
+        if (isset($_SESSION["connected"]) && !$participe_deja_creneau && !$complet){
             echo " <button class='bouton' type='submit' name='rejoindre' value=".$cour["id"].">participer</button>";
 
 //        }if (isset($_SESSION["connected"]) && in_array($cour["jour"], $jour_utiliser)){
