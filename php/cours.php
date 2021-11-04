@@ -80,7 +80,7 @@ if (isset($_GET["search"])) {
     //cherche tout les cours auquel participe l'utilisateur afin de pouvoir recup l'id du cours
     // pour recup la date et heure du cour pour afficher les bouttons rejoindre seulement quand il peut
     if (isset($_SESSION["connected"])){
-        $req_cour_user = $db->prepare("select jour, heure from cours inner join
+        $req_cour_user = $db->prepare("select id_cour,jour, heure from cours inner join
         reservation on cours.id = reservation.id_cour where reservation.id_utilisateur=?");
 
         $req_cour_user->execute([$_SESSION["connected"]]);
@@ -152,7 +152,9 @@ if (isset($_GET["search"])) {
         if (isset($_SESSION["connected"]) && !$participe_deja_creneau && !$complet){
             echo " <button class='bouton' type='submit' name='rejoindre' value=".$cour["id"].">participer</button>";
 
-//        }if (isset($_SESSION["connected"]) && in_array($cour["jour"], $jour_utiliser)){
+        }elseif (isset($_SESSION["connected"]) && in_array($cour["id"], array_column($jour_heure_utiliser,"id_cour"))){
+            echo "<button class='bouton' type='submit' name='quitter' value=".$cour["id"] .">quitter</button>";
+
 
         }if (isset($_SESSION["admin"])) {
             echo "<button class='bouton' type='submit' name='suppr' value=".$cour["id"].">SUPPR</button>";
@@ -193,8 +195,13 @@ if (isset($_GET["search"])) {
 
 //ajout participant
 if (isset($_GET["rejoindre"])){
-    $req_participer = $db->prepare("insert into reservation(id_cour, id_utilisateur) values (?,?)");
-    $req_participer->execute([$_GET["rejoindre"], $_SESSION["connected"]]);
+    $req_ajout_participer = $db->prepare("insert into reservation(id_cour, id_utilisateur) values (?,?)");
+    $req_ajout_participer->execute([$_GET["rejoindre"], $_SESSION["connected"]]);
+}
+//retirer participant
+elseif (isset($_GET["quitter"])){
+    $req_retirer_participant=$db->prepare("delete from reservation where id_cour=? and id_utilisateur=?");
+    $req_retirer_participant->execute([$_GET["quitter"], $_SESSION["connected"]]);
 }
 //suppression cour
 elseif (isset($_GET["suppr"])){
