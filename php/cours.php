@@ -74,6 +74,21 @@ session_start();
 
 //cherche selon type cour date et jour
 if (isset($_GET["search"])) {
+
+    $jour_heure_utiliser=array();
+    
+    //cherche tout les cours auquel participe l'utilisateur afin de pouvoir recup l'id du cours
+    // pour recup la date et heure du cour pour afficher les bouttons rejoindre seulement quand il peut
+    if (isset($_SESSION["connected"])){
+        $req_cour_user = $db->prepare("select jour, heure from cours inner join
+        reservation on cours.id = reservation.id_cour where reservation.id_utilisateur=?");
+
+        $req_cour_user->execute([$_SESSION["connected"]]);
+        $jour_heure_utiliser = $req_cour_user->fetchAll();
+
+    }
+
+
     $prepare = "";
 
     $need_and = 0;
@@ -126,8 +141,20 @@ if (isset($_GET["search"])) {
         echo $cour_nom["nom"] . " " . $cour["jour"] . " "
             . $cour["heure"] . "H " . $cour["salle"] . " " . $particpant["participe"] .
             "/" . $cour["nb_place"];
-        echo " <button class='bouton' type='submit' name='rejoindre' value=".$cour["id"].">participer</button>";
-        if (isset($_SESSION["admin"])) {
+
+
+
+        $participe_deja_crenaux = array_filter($jour_heure_utiliser, function($val) use($cour){
+        return ($val["jour"]==$cour["jour"] and $val["heure"]==$cour["heure"]);
+            });
+
+        //si utiliser est connecter et il n'est pas inscrit à un cours le meme jour et heure alors il peut s'y inscrire
+        if (isset($_SESSION["connected"]) && !$participe_deja_crenaux){
+            echo " <button class='bouton' type='submit' name='rejoindre' value=".$cour["id"].">participer</button>";
+
+//        }if (isset($_SESSION["connected"]) && in_array($cour["jour"], $jour_utiliser)){
+
+        }if (isset($_SESSION["admin"])) {
             echo "<button class='bouton' type='submit' name='suppr' value=".$cour["id"].">SUPPR</button>";
         }
         echo "<br><br>";
@@ -135,7 +162,7 @@ if (isset($_GET["search"])) {
     echo "</form></fieldset>";
 
 
-    //si root, (date et heure) specifier afiche cours que l'on peut ajouter
+    //si admin, (date et heure) specifier: afiche cours que l'on peut ajouter
     if ($date = $_GET["date_cour"] && $heure = $_GET["heure_cour"] && isset($_SESSION["admin"])) {
         if ($cour_existe == []) {
             $req_cour_existe_pas = $db->prepare("select id from nom_cours");
@@ -171,8 +198,10 @@ if (isset($_GET["rejoindre"])){
 }
 //suppression cour
 elseif (isset($_GET["suppr"])){
-    $req_supr_cour = $db->prepare("delete from cours where id=?");
-    $req_supr_cour->execute([$_GET["suppr"]]);
+    $req_suppr_reservation=$db->prepare("delete from reservation where id_cour=?");
+    $req_suppr_cour = $db->prepare("delete from cours where id=?");
+    $req_suppr_reservation->execute([$_GET["suppr"]]);
+    $req_suppr_cour->execute([$_GET["suppr"]]);
 }
 //ajout cour
 elseif (isset($_GET["ajout_cour"])){

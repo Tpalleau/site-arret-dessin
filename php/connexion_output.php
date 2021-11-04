@@ -18,7 +18,7 @@ if ($_GET["connect"] == "true"){
         header("Location: index.php");
     }
 }else{
-    $_SESSION["connected"]="";
+    unset($_SESSION["connected"]);
     unset($_SESSION["admin"]);
     header("location: index.php");
 }
