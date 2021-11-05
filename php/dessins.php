@@ -3,7 +3,7 @@
 session_start();
 ?>
 <head>
-    <title>Index</title>
+    <title>dessin</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -32,6 +32,16 @@ session_start();
         </ul>
     </div>
 </nav>
+<div>
+    <h2>Bienvenue sur le site du club Arret Dessin!</h2>
+</div>
+<div>
+    <form>
+        Select Image File to Upload:
+        <input type="file" name="file">
+        <input type="submit" name="submit" value="Upload">
+    </form>
+</div>
 <footer>
     <p>Arret dessin </p>
 </footer>
