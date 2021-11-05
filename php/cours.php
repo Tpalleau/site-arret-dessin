@@ -119,7 +119,9 @@ if (isset($_GET["search"])) {
     }
 
     //si on cherche par utilisateur
+    $recherche_utilisateure=false;
     if(isset($_GET["participation"]) || $_GET["participant"]) {
+        $recherche_utilisateure=true;
 
         //syntax unique pour quand on cherche pour les 2
         if (isset($_GET["participation"]) && $_GET["participant"]) {
@@ -146,7 +148,7 @@ if (isset($_GET["search"])) {
     $prepare = "";
     $need_and = 0;
 
-    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heure_cour"] || isset($id_cour)) {//si une condition est demandé
+    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heure_cour"] || $recherche_utilisateure) {//si une condition est demandé
         $prepare = $prepare . "where";//ajouter where
         if ($_GET["cour"]) {
             $prepare = $prepare . " nom=" . $_GET["cour"];
@@ -171,7 +173,7 @@ if (isset($_GET["search"])) {
         } else {
             $time = "";
         }
-        if (isset($id_cour)){
+        if ($recherche_utilisateure){
             if ($need_and) {//si condition avant celle ci
                 $prepare = $prepare . " and ";
             }
@@ -201,7 +203,7 @@ if (isset($_GET["search"])) {
         echo "<h2>Aucun cours ne correspond a votre requête</h2>";
     }
 
-//recup toute les infos sur ce cours
+    //recup toute les infos sur ce cours
     $req_cour_info = $db->prepare("select id,nom ,salle,nb_place,jour,heure from cours " . $prepare);
     //recup le nom du cours
     $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
@@ -256,8 +258,8 @@ if (isset($_GET["search"])) {
     echo "</form>";
 
 
-    //si admin, (date et heure) specifier: afiche cours que l'on peut ajouter
-    if ($date = $_GET["date_cour"] && $heure = $_GET["heure_cour"] && isset($_SESSION["admin"])) {
+    //si admin, (date et heure) specifier et recherche utilisateur NON specifier: afiche cours que l'on peut ajouter
+    if ($date = $_GET["date_cour"] && $heure = $_GET["heure_cour"] && isset($_SESSION["admin"]) && !$recherche_utilisateure) {
         if ($cour_existe == []) {
             $req_cour_existe_pas = $db->prepare("select id from nom_cours");
         } else {

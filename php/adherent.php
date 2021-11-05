@@ -46,22 +46,94 @@ session_start();
         </label>
         <label for="niveau">Niveau de Dessin : </label>
         <select name="niveau" id="niveau">
+            <option value=""> </option>
 
             <?php
             $db = new PDO("mysql:host=localhost;dbname=dessin_bdd;charset=UTF8","root","");
-            $req_name_lvl = $db->prepare("select nom from nom_niv");
+            $req_name_lvl = $db->prepare("select nom,id from nom_niv");
             $req_name_lvl->execute();
 
             while ($name = $req_name_lvl->fetch()) {
-                echo "<option value=" . $name["nom"] . ">" . $name["nom"] . "</option>";
+                echo "<option value=" . $name["id"] . ">" . $name["nom"] . "</option>";
             }
             ?>
 
         </select><br>
         <label>
-            <input class="submit" type="submit" value="Rechercher">
+            <input class="submit" type="submit" id="search" name="search" value="Rechercher">
         </label>
     </form>
+</div>
+<div>
+    <?php
+    if (isset($_GET["search"])){
+        $prepare = "";
+        $need_and = 0;
+
+        if ($_GET["texte_nom"] || $_GET["texte_prenom"] || $_GET["texte_email"] || $_GET["niveau"]) {//si une condition est demandé
+            $prepare = $prepare . "where";//ajouter where
+            if ($_GET["texte_nom"]) {
+                $prepare = $prepare . " nom='" . $_GET["texte_nom"] . "'";
+                $need_and = 1;
+            }
+            if ($_GET["texte_prenom"]) {
+                if ($need_and) {//si condition avant celle ci
+                    $prepare = $prepare . " and ";
+                }
+                $need_and = 1;
+
+                $prepare = $prepare . " prenom='" . $_GET["texte_prenom"] . "'";
+
+            }
+            if ($_GET["texte_email"]) {
+                if ($need_and) {//si condition avant celle ci
+                    $prepare = $prepare . " and ";
+                }
+                $need_and=1;
+
+                $prepare = $prepare . " email='" . $_GET["texte_email"] . "'";
+            } else {
+                $time = "";
+            }
+            if ($_GET["niveau"]){
+                if ($need_and) {//si condition avant celle ci
+                    $prepare = $prepare . " and ";
+                }
+
+                $prepare=$prepare." niveau=". $_GET["niveau"];
+            }
+        }
+
+        $req_utilisateur = $db->prepare("select prenom, nom, surnom, niv_dessin from utilisateur ".$prepare);
+        $req_utilisateur->execute();
+        $utilisateur = $req_utilisateur->fetchAll();
+
+        if ($utilisateur) {
+            echo "<form id='info_cour' class='cours'>";
+            echo "<table>
+            <tr>
+                <th class='haut'>prenom</th>
+                <th class='haut'>nom</th>
+                <th class='haut'>surnom</th>
+                <th class='haut'>niveau de dessin</th>
+            </tr>";
+
+            foreach ($utilisateur as $u){
+                echo
+                    "<tr>
+                <th> " . $u["prenom"] . "</th>
+                <th> " . $u["nom"] . "</th>
+                <th>" . $u["surnom"] . "</th>
+                <th>" . $u["niv_dessin"] . "</th>";
+            }
+            echo "</table>";
+            echo "</form>";
+
+        }else{
+            echo "<h2>Aucun utilisateur ne correspond a votre requête</h2>";
+        }
+    }
+    ?>
 </div>
 <footer>
     <p>Arret dessin </p>
