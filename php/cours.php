@@ -66,6 +66,34 @@ session_start();
             ?><br>
 
         </select><br>
+
+        <?php
+            if (isset($_SESSION["connected"])){
+        echo "
+        <label for='participation'>
+            mes participations<input type='checkbox' name='participation' id='participation' value=".$_SESSION["connected"].">
+        </label>";
+            } ?>
+
+        <label for="particpant">
+            <select name="participant" id="particpant">
+                <option value=""> </option>
+                <?php
+                $req_utilisateur = $db->prepare("select id,prenom, nom, surnom from utilisateur where id!=?");
+
+                //affiche tout les participants sauf l'utilisateur connecter
+                if (isset($_SESSION["connected"])){
+                    $req_utilisateur->execute([$_SESSION["connected"]]);
+                }else{
+                    $req_utilisateur->execute([-1]);
+                }
+                while ($utilisateur = $req_utilisateur->fetch()){
+                    echo "<option value=".$utilisateur["id"].">".$utilisateur["prenom"]. " ".$utilisateur["nom"]." ".$utilisateur["surnom"]."</option>";
+                }
+                ?>
+            </select><br>
+        </label>
+
         <label>
             <input class="submit" type="submit" id="search" name="search" value="Rechercher" />
         </label>
@@ -78,9 +106,9 @@ session_start();
 if (isset($_GET["search"])) {
 
     $jour_heure_utiliser=array();
+    $cour_par_participant=array();
     
-    //cherche tout les cours auquel participe l'utilisateur afin de pouvoir recup l'id du cours
-    // pour recup la date et heure du cour pour afficher les bouttons rejoindre seulement quand il peut
+    //cherche tout les cours auquel participe l'utilisateur: pour bouton rejoindre, quitter et aucun
     if (isset($_SESSION["connected"])){
         $req_cour_user = $db->prepare("select id_cour,jour, heure from cours inner join
         reservation on cours.id = reservation.id_cour where reservation.id_utilisateur=?");
@@ -90,11 +118,35 @@ if (isset($_GET["search"])) {
 
     }
 
+    //si on cherche par utilisateur
+    if(isset($_GET["participation"]) || $_GET["participant"]) {
+
+        //syntax unique pour quand on cherche pour les 2
+        if (isset($_GET["participation"]) && $_GET["participant"]) {
+            $req_cour_par_participant = $db->prepare("SELECT r1.id_cour FROM reservation r1 INNER JOIN
+                reservation r2 ON r2.id_utilisateur=? and r1.id_utilisateur=? and r1.id_cour=r2.id_cour");
+            $req_cour_par_participant->execute([$_GET["participation"], $_GET["participant"]]);
+
+        }else{ //si pas les 2 on cherche lequel à été appelé
+            $id = "";
+            if (isset($_GET["participation"])) {
+                $id = $_GET["participation"];
+            } else {
+                $id = $_GET["participant"];
+            }
+
+            $req_cour_par_participant = $db->prepare("select id_cour from reservation where id_utilisateur=?");
+            $req_cour_par_participant->execute([$id]);
+        }
+        $id_cour = $req_cour_par_participant->fetchAll(PDO::FETCH_COLUMN,0);
+    }
+
+
 
     $prepare = "";
-
     $need_and = 0;
-    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heure_cour"]) {//si une condition est demandé
+
+    if ($_GET["cour"] || $_GET["date_cour"] || $_GET["heure_cour"] || isset($id_cour)) {//si une condition est demandé
         $prepare = $prepare . "where";//ajouter where
         if ($_GET["cour"]) {
             $prepare = $prepare . " nom=" . $_GET["cour"];
@@ -113,10 +165,18 @@ if (isset($_GET["search"])) {
             if ($need_and) {//si condition avant celle ci
                 $prepare = $prepare . " and ";
             }
+            $need_and=1;
 
             $prepare = $prepare . ' heure="' . $_GET["heure_cour"] . ':00:00"';
         } else {
             $time = "";
+        }
+        if (isset($id_cour)){
+            if ($need_and) {//si condition avant celle ci
+                $prepare = $prepare . " and ";
+            }
+
+            $prepare=$prepare." id in (".implode(",",$id_cour).")";
         }
     }
     //recup toute les infos sur ce cours
