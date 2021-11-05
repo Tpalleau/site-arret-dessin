@@ -173,12 +173,14 @@ if (isset($_GET["search"])) {
         } else {
             $time = "";
         }
-        if ($recherche_utilisateure){
+        if ($recherche_utilisateure && $id_cour<>NULL){
             if ($need_and) {//si condition avant celle ci
                 $prepare = $prepare . " and ";
             }
 
             $prepare=$prepare." id in (".implode(",",$id_cour).")";
+        }elseif ($recherche_utilisateure && $id_cour==NULL){
+            $prepare="where id=-1";
         }
     }
     //recup toute les infos sur ce cours
@@ -186,9 +188,9 @@ if (isset($_GET["search"])) {
 
     $req_cour_existe->execute();
     $cour_existe = [];
-    $cour = $req_cour_existe->fetch();
+    $cours = $req_cour_existe->fetchAll();
 
-    if ($cour <> NULL) {
+    if ($cours <> NULL) {
         echo "<form id='info_cour' class='cours'>";
         echo "<table>
             <tr>
@@ -199,39 +201,37 @@ if (isset($_GET["search"])) {
                 <th class='haut'>Nombre d'Inscrits</th>
                 <th class='haut'>Nombre de Places</th>          
             </tr>";
-    }else{
-        echo "<h2>Aucun cours ne correspond a votre requête</h2>";
-    }
 
-    //recup toute les infos sur ce cours
-    $req_cour_info = $db->prepare("select id,nom ,salle,nb_place,jour,heure from cours " . $prepare);
-    //recup le nom du cours
-    $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
-    //recup le nombre de participant
-    $req_participant = $db->prepare("select count(id_utilisateur) as participe  from reservation where id_cour=?");
 
-    $req_cour_info->execute();
-    $cour_existe = [];
+        //recup toute les infos sur ce cours
+        $req_cour_info = $db->prepare("select id,nom ,salle,nb_place,jour,heure from cours " . $prepare);
+        //recup le nom du cours
+        $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
+        //recup le nombre de participant
+        $req_participant = $db->prepare("select count(id_utilisateur) as participe  from reservation where id_cour=?");
 
-    while ($cour = $req_cour_info->fetch()) {
+        $req_cour_info->execute();
+        $cour_existe = [];
 
-        $req_cour_nom->execute([$cour["nom"]]); //recup nom du cour
-        $req_participant->execute([$cour["id"]]);
+        foreach ($cours as $cour) {
 
-        $cour_nom = $req_cour_nom->fetch();
-        $particpant = $req_participant->fetch();
+            $req_cour_nom->execute([$cour["nom"]]); //recup nom du cour
+            $req_participant->execute([$cour["id"]]);
 
-        // verifie si on participe déjà à un cour sur le meme crenaux
-        $participe_deja_creneau = array_filter($jour_heure_utiliser, function($val) use($cour){
-            return ($val["jour"]==$cour["jour"] and $val["heure"]==$cour["heure"]); });
+            $cour_nom = $req_cour_nom->fetch();
+            $particpant = $req_participant->fetch();
 
-        $complet = $particpant["participe"]>= $cour["nb_place"];
+            // verifie si on participe déjà à un cour sur le meme crenaux
+            $participe_deja_creneau = array_filter($jour_heure_utiliser, function($val) use($cour){
+                return ($val["jour"]==$cour["jour"] and $val["heure"]==$cour["heure"]); });
 
-        array_push($cour_existe, $cour["nom"]);
+            $complet = $particpant["participe"]>= $cour["nb_place"];
 
-        //affiche nom/jour/heure/salle/nb participant/nb place
-        echo
-            "<tr>
+            array_push($cour_existe, $cour["nom"]);
+
+            //affiche nom/jour/heure/salle/nb participant/nb place
+            echo
+                "<tr>
             <th> " . $cour_nom["nom"] . "</th>
             <th> " . $cour["jour"] . "</th>
             <th>" . $cour["heure"] . "H</th>
@@ -239,23 +239,24 @@ if (isset($_GET["search"])) {
             <th>" . $particpant["participe"] . "</th>
             <th>" . $cour["nb_place"] . "</th>";
 
-        if (isset($_SESSION["connected"]) && !$participe_deja_creneau && !$complet) {
-            echo "<th class='hors_tableau'><button class='bouton_rejoindre' type='submit' name='rejoindre' value=" . $cour["id"] . ">participer</button></th>";
+            if (isset($_SESSION["connected"]) && !$participe_deja_creneau && !$complet) {
+                echo "<th class='hors_tableau'><button class='bouton_rejoindre' type='submit' name='rejoindre' value=" . $cour["id"] . ">participer</button></th>";
 
-        } elseif (isset($_SESSION["connected"]) && in_array($cour["id"], array_column($jour_heure_utiliser, "id_cour"))) {
-            echo "<th class='hors_tableau'><button class='bouton_quitter' type='submit' name='quitter' value=" . $cour["id"] . ">quitter</button></th>";
+            } elseif (isset($_SESSION["connected"]) && in_array($cour["id"], array_column($jour_heure_utiliser, "id_cour"))) {
+                echo "<th class='hors_tableau'><button class='bouton_quitter' type='submit' name='quitter' value=" . $cour["id"] . ">quitter</button></th>";
+            }
+            if (isset($_SESSION["admin"])) {
+                echo "<th class='hors_tableau'><button class='bouton_suppr' type='submit' name='suppr' value=" . $cour["id"] . ">SUPPR</button></th>";
+            }
+            echo "</tr>";
         }
-        if (isset($_SESSION["admin"])) {
-            echo "<th class='hors_tableau'><button class='bouton_suppr' type='submit' name='suppr' value=" . $cour["id"] . ">SUPPR</button></th>
-               
-         </tr> ";
-        }
+        echo "</table>";
+        echo "</form>";
 
 
-
+    }else{
+        echo "<h2>Aucun cours ne correspond a votre requête</h2>";
     }
-    echo "</table>";
-    echo "</form>";
 
 
     //si admin, (date et heure) specifier et recherche utilisateur NON specifier: afiche cours que l'on peut ajouter
