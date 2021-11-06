@@ -100,10 +100,9 @@ session_start();
                     $prepare = $prepare . " and ";
                 }
 
-                $prepare=$prepare." niveau=". $_GET["niveau"];
+                $prepare=$prepare." niv_dessin=". $_GET["niveau"];
             }
         }
-
         $req_utilisateur = $db->prepare("select prenom, nom, surnom, niv_dessin from utilisateur ".$prepare);
         $req_utilisateur->execute();
         $utilisateur = $req_utilisateur->fetchAll();
