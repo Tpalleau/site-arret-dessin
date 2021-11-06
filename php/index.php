@@ -19,16 +19,15 @@ session_start();
                         ?>
                         <li> <a href="inscription.php">S'Inscrire</a> </li>
                         <li> <a href="connexion.php">Connexion</a> </li>
-                    <?php
+                        <?php
                     }else{ ?>
                         <li> <a href="connexion_output.php?connect=false">Deconnnexion</a> </li>
-
-                    <?php
+                        <li> <a href="dessins.php">Dessins</a> </li>
+                        <?php
                     } ?>
                     <li> <a href="cours.php">Cours</a> </li>
-                    <li> <a href="dessins.php">Dessins</a> </li>
-                    <li> <a href="demande.php">Demande au club</a> </li> <!-- demande materiel, cours ou autre -->
                     <li> <a href="adherent.php">Recherche d'adhérent</a></li>
+                    <li> <a href="demande.php">Demande au club</a> </li> <!-- demande materiel, cours ou autre -->
                 </ul>
             </div>
         </nav>

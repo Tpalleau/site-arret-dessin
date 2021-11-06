@@ -61,19 +61,19 @@ if (isset($_POST['upload'])) {
         $db = mysqli_connect("localhost", "root", "", "dessin_bdd");
         $query="select * from post where id_utilisateur=".$_SESSION["connected"]." and titre='".$_POST["titre"]."'";
         $titre_existe = mysqli_query($db  ,$query);
+        
+        if ($titre_existe->num_rows == 0){
+            $filename = $_FILES["uploadfile"]["name"];
+            $tempname = $_FILES["uploadfile"]["tmp_name"];
+            $folder = "../image/" . $filename;
 
-        if (!$titre_existe){
-        $filename = $_FILES["uploadfile"]["name"];
-        $tempname = $_FILES["uploadfile"]["tmp_name"];
-        $folder = "../image/" . $filename;
+            // Get all the submitted data from the form
+            $query = "INSERT INTO post(id_utilisateur,dessin, titre) VALUES (" . $_SESSION["connected"] . ",'$filename','" . $_POST["titre"] . "')";
 
-        // Get all the submitted data from the form
-        $query = "INSERT INTO post(id_utilisateur,dessin, titre) VALUES (" . $_SESSION["connected"] . ",'$filename','" . $_POST["titre"] . "')";
-
-        // Execute query
-        mysqli_query($db, $query);
+            // Execute query
+            mysqli_query($db, $query);
         }else{
-            echo "une de vos oeuvres à le meme nom, veuillez en chosir un autre";
+            echo "une de vos oeuvres à le meme nom, veuillez en chosir un autre titre";
         }
     } else {
         echo "aucun fichier n'as été selectionnez";
