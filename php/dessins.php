@@ -22,26 +22,64 @@ session_start();
                 <?php
             }else{ ?>
                 <li> <a href="connexion_output.php?connect=false">Deconnnexion</a> </li>
-
+                <li> <a href="dessins.php">Dessins</a> </li>
                 <?php
             } ?>
             <li> <a href="cours.php">Cours</a> </li>
-            <li> <a href="dessins.php">Dessins</a> </li>
-            <li> <a href="demande.php">Demande au club</a> </li> <!-- demande materiel, cours ou autre -->
             <li> <a href="adherent.php">Recherche d'adhérent</a></li>
+            <li> <a href="demande.php">Demande au club</a> </li> <!-- demande materiel, cours ou autre -->
         </ul>
     </div>
 </nav>
 <div>
     <h2>Bienvenue sur le site du club Arret Dessin!</h2>
 </div>
-<div>
-    <form>
-        Select Image File to Upload:
-        <input type="file" name="file">
-        <input type="submit" name="submit" value="Upload">
+<div id="content">
+
+    <form method="POST"
+          action=""
+          enctype="multipart/form-data">
+        titre<input type="text" name="titre" required="required"><br>
+        <input type="file"
+               name="uploadfile"
+               value="" />
+
+        <div>
+            <button type="submit"
+                    name="upload">
+                UPLOAD
+            </button>
+        </div>
     </form>
 </div>
+<?php
+$msg = "";
+
+// If upload button is clicked ...
+if (isset($_POST['upload'])) {
+    if ($_FILES["uploadfile"]["name"] <> NULL) {
+        $db = mysqli_connect("localhost", "root", "", "dessin_bdd");
+        $query="select * from post where id_utilisateur=".$_SESSION["connected"]." and titre='".$_POST["titre"]."'";
+        $titre_existe = mysqli_query($db  ,$query);
+
+        if (!$titre_existe){
+        $filename = $_FILES["uploadfile"]["name"];
+        $tempname = $_FILES["uploadfile"]["tmp_name"];
+        $folder = "../image/" . $filename;
+
+        // Get all the submitted data from the form
+        $query = "INSERT INTO post(id_utilisateur,dessin, titre) VALUES (" . $_SESSION["connected"] . ",'$filename','" . $_POST["titre"] . "')";
+
+        // Execute query
+        mysqli_query($db, $query);
+        }else{
+            echo "une de vos oeuvres à le meme nom, veuillez en chosir un autre";
+        }
+    } else {
+        echo "aucun fichier n'as été selectionnez";
+    }
+}
+?>
 <footer>
     <p>Arret dessin </p>
 </footer>
