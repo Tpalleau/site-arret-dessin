@@ -189,6 +189,14 @@ if (isset($_GET["search"])) {
     $cour_existe = [];
     $cours = $req_cour_existe->fetchAll();
 
+
+    //recup toute les infos sur ce cours
+    $req_cour_info = $db->prepare("select id,nom ,salle,nb_place,jour,heure from cours " . $prepare);
+    //recup le nom du cours
+    $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
+    //recup le nombre de participant
+    $req_participant = $db->prepare("select count(id_utilisateur) as participe  from reservation where id_cour=?");
+
     if ($cours <> NULL) {
         echo "<form id='info_cour' class='cours'>";
         echo "<table>
@@ -200,14 +208,6 @@ if (isset($_GET["search"])) {
                 <th class='haut'>Nombre d'Inscrits</th>
                 <th class='haut'>Nombre de Places</th>          
             </tr>";
-
-
-        //recup toute les infos sur ce cours
-        $req_cour_info = $db->prepare("select id,nom ,salle,nb_place,jour,heure from cours " . $prepare);
-        //recup le nom du cours
-        $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
-        //recup le nombre de participant
-        $req_participant = $db->prepare("select count(id_utilisateur) as participe  from reservation where id_cour=?");
 
         $req_cour_info->execute();
         $cour_existe = [];
