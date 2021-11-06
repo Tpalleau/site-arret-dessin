@@ -32,7 +32,7 @@ session_start();
     </div>
 </nav>
 <div>
-    <h2>Bienvenue sur le site du club Arret Dessin!</h2>
+    <h2>Postez vos dessins ici !</h2>
 </div>
 <div id="content">
 
@@ -61,7 +61,7 @@ if (isset($_POST['upload'])) {
         $db = mysqli_connect("localhost", "root", "", "dessin_bdd");
         $query="select * from post where id_utilisateur=".$_SESSION["connected"]." and titre='".$_POST["titre"]."'";
         $titre_existe = mysqli_query($db  ,$query);
-        
+
         if ($titre_existe->num_rows == 0){
             $filename = $_FILES["uploadfile"]["name"];
             $tempname = $_FILES["uploadfile"]["tmp_name"];
