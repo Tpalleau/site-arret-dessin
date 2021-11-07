@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 02 nov. 2021 à 14:33
+-- Généré le : dim. 07 nov. 2021 à 23:07
 -- Version du serveur : 10.4.21-MariaDB
--- Version de PHP : 8.0.10
+-- Version de PHP : 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -43,7 +43,7 @@ CREATE TABLE `cours` (
 INSERT INTO `cours` (`id`, `nom`, `nb_place`, `salle`, `jour`, `heure`) VALUES
 (2, 6, 10, 'P108', '2021-10-31', '16:00:00'),
 (4, 6, 4, 'p200', '2021-11-07', '18:00:00'),
-(7, 7, 13, 'P100', '2021-11-01', '08:00:00');
+(9, 7, 4, 'p200', '2021-11-07', '18:00:00');
 
 -- --------------------------------------------------------
 
@@ -107,8 +107,19 @@ CREATE TABLE `post` (
 
 CREATE TABLE `reservation` (
   `id_cour` int(11) NOT NULL,
-  `id_utilisateur` int(11) NOT NULL
+  `id_utilisateur` int(11) NOT NULL,
+  `invite` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO `reservation` (`id_cour`, `id_utilisateur`, `invite`) VALUES
+(2, 22, 1),
+(2, 23, 0),
+(4, 21, 1),
+(9, 22, 0);
 
 -- --------------------------------------------------------
 
@@ -133,9 +144,9 @@ CREATE TABLE `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`id`, `email`, `surnom`, `nom`, `prenom`, `niv_dessin`, `admin`, `passwd`, `naissance`) VALUES
-(16, 'root@gmail.com', 'root', 'root', 'root', 1, 1, '*9CFBBC772F3F6C106020035386DA5BBBF1249A11', '0001-11-11'),
-(17, 'user@gmail.com', 'user', 'user', 'user', 1, 0, '*A1D2142CEE6124B304C4FBFC700E0990AD95C0F8', '0002-02-22'),
-(18, 'Dorine@gmail.com', 'DODO', 'Dorine', 'Lasmartres', 5, 0, '*F72BD56153C85C4E7AF4E4F158D2332782B3F896', '2005-07-21');
+(21, 'admin@admin.fr', 'admin', 'admin', 'admin', 1, 1, '*4ACFE3202A5FF5CF467898FC58AAB1D615029441', '2000-01-01'),
+(22, 'gregmetral@gmail.com', 'Evry', 'metral', 'greg', 4, 0, '*DE1603C602E05969E50EBCE5CBBE2408D690D05E', '2002-12-26'),
+(23, 'pierrejean@gmail.com', 'eau', 'pierre', 'jean', 2, 0, '*DE1603C602E05969E50EBCE5CBBE2408D690D05E', '2003-01-10');
 
 --
 -- Index pour les tables déchargées
@@ -189,7 +200,7 @@ ALTER TABLE `utilisateur`
 -- AUTO_INCREMENT pour la table `cours`
 --
 ALTER TABLE `cours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `nom_cours`
@@ -207,7 +218,7 @@ ALTER TABLE `nom_niv`
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Contraintes pour les tables déchargées
