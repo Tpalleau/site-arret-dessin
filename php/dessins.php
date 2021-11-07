@@ -25,6 +25,7 @@ session_start();
                 <li> <a href="dessins.php">Dessins</a> </li>
                 <?php
             } ?>
+            <li> <a href="post.php">Post</a> </li>
             <li> <a href="cours.php">Cours</a> </li>
             <li> <a href="adherent.php">Recherche d'adhérent</a></li>
             <li> <a href="demande.php">Demande au club</a> </li> <!-- demande materiel, cours ou autre -->
@@ -63,15 +64,13 @@ if (isset($_POST['upload'])) {
         $titre_existe = mysqli_query($db  ,$query);
 
         if ($titre_existe->num_rows == 0){
-            $filename = $_FILES["uploadfile"]["name"];
-            $tempname = $_FILES["uploadfile"]["tmp_name"];
-            $folder = "../image/" . $filename;
+            $image = addslashes(file_get_contents($_FILES['uploadfile']['tmp_name']));
 
             // Get all the submitted data from the form
-            $query = "INSERT INTO post(id_utilisateur,dessin, titre) VALUES (" . $_SESSION["connected"] . ",'$filename','" . $_POST["titre"] . "')";
+            $query = "INSERT INTO post(id_utilisateur,dessin, titre) VALUES (".$_SESSION["connected"].",'$image','".$_POST["titre"]."')";
 
             // Execute query
-            mysqli_query($db, $query);
+            $qry = mysqli_query($db, $query);
         }else{
             echo "une de vos oeuvres à le meme nom, veuillez en chosir un autre titre";
         }
