@@ -107,10 +107,12 @@ if (isset($_GET["search"])) {
     $jour_heure_utiliser=array();
     $cour_par_participant=array();
     
-    //cherche tout les cours auquel participe l'utilisateur: pour bouton rejoindre, quitter et aucun
+    //cherche tout les cours auquel participe l'utilisateur et invite: pour bouton rejoindre, quitter et aucun
     if (isset($_SESSION["connected"])){
         $req_cour_user = $db->prepare("select id_cour,jour, heure from cours inner join
         reservation on cours.id = reservation.id_cour where reservation.id_utilisateur=?");
+        $req_invite=$db->prepare("select invite from reservation where id_cour=? and id_utilisateur=".$_SESSION["connected"]);
+
 
         $req_cour_user->execute([$_SESSION["connected"]]);
         $jour_heure_utiliser = $req_cour_user->fetchAll();
@@ -195,7 +197,8 @@ if (isset($_GET["search"])) {
     //recup le nom du cours
     $req_cour_nom = $db->prepare("select nom from nom_cours where id=?");
     //recup le nombre de participant
-    $req_participant = $db->prepare("select count(id_utilisateur) as participe  from reservation where id_cour=?");
+    $req_participant = $db->prepare("select 
+       (count(id_utilisateur) + sum(invite)) as participe  from reservation where id_cour=?");
 
     if ($cours <> NULL) {
         echo "<form id='info_cour' class='cours'>";
@@ -240,9 +243,19 @@ if (isset($_GET["search"])) {
 
             if (isset($_SESSION["connected"]) && !$participe_deja_creneau && !$complet) {
                 echo "<th class='hors_tableau'><button class='bouton_rejoindre' type='submit' name='rejoindre' value=" . $cour["id"] . ">participer</button></th>";
-
             } elseif (isset($_SESSION["connected"]) && in_array($cour["id"], array_column($jour_heure_utiliser, "id_cour"))) {
                 echo "<th class='hors_tableau'><button class='bouton_quitter' type='submit' name='quitter' value=" . $cour["id"] . ">quitter</button></th>";
+
+                //on ne peut ajouter un invite si on participe au cours
+                $req_invite->execute([$cour["id"]]);
+                $est_invite = $req_invite->fetch();
+                if ($est_invite===NULL || $est_invite[0]==false){
+                    print_r($est_invite);
+                    echo "<th class='hors_tableau'><button type='submit' name='ajouter_invite' value=" . $cour["id"] . ">ajout invite</button></th>";
+                }else{
+                    print_r($est_invite);
+                    echo "<th class='hors_tableau'><button type='submit' name='quitter_invite' value=" . $cour["id"] . ">retirer invite</button></th>";
+                }
             }
             if (isset($_SESSION["admin"])) {
                 echo "<th class='hors_tableau'><button class='bouton_suppr' type='submit' name='suppr' value=" . $cour["id"] . ">SUPPR</button></th>";
@@ -272,7 +285,7 @@ if (isset($_GET["search"])) {
         echo "<form id='ajout_cour'>";
         echo $_GET["date_cour"] . " | " . $_GET["heure_cour"] . "H " . "<br>";
         echo " salle: <input class='texte' type='text' name='salle' required='required' form='ajout_cour'><br>";
-        echo "nombre d'élève: <input class='texte' type='number' name='nb_place' required='required' form='ajout_cour'><br><br>";
+        echo "nombre d'élève: <input class='texte' type='number' name='nb_place' required='required' form='ajout_cour' min='1'><br><br>";
         echo "<input type='hidden' name='date' value=" . $_GET['date_cour'] . ">";
         echo "<input type='hidden' name='heure' value=" . $_GET['heure_cour'] . ">";
 
@@ -296,6 +309,16 @@ if (isset($_GET["rejoindre"])){
 elseif (isset($_GET["quitter"])){
     $req_retirer_participant=$db->prepare("delete from reservation where id_cour=? and id_utilisateur=?");
     $req_retirer_participant->execute([$_GET["quitter"], $_SESSION["connected"]]);
+}
+//ajout invite
+elseif (isset($_GET["ajouter_invite"])){
+    $req_ajout_invite = $db->prepare("update reservation set invite=1 where id_cour=? and id_utilisateur=".$_SESSION["connected"]);
+    $req_ajout_invite->execute([$_GET["ajouter_invite"]]);
+}
+//retirer invite
+elseif (isset($_GET["quitter_invite"])){
+    $req_ajout_invite = $db->prepare("update reservation set invite=0 where id_cour=? and id_utilisateur=".$_SESSION["connected"]);
+    $req_ajout_invite->execute([$_GET["quitter_invite"]]);
 }
 //suppression cour
 elseif (isset($_GET["suppr"])){
