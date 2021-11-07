@@ -32,7 +32,7 @@ session_start();
         </ul>
     </div>
 </nav>
-<div>
+<div class="formulaire">
     <form>
         titre:
         <label for="titre">
@@ -52,7 +52,7 @@ session_start();
         ?>
         </select><br>
 
-        <input type="submit" name="rechercher" value="rechercher">
+        <input class="submit" type="submit" name="rechercher" value="rechercher">
     </form>
 </div>
 <div>
@@ -75,7 +75,7 @@ if (isset($_GET["rechercher"])){
             $prepare=$prepare." id_utilisateur=".$_GET["utilisateur"];
         }
     }
-    $result = $db->query("SELECT p.titre, p.dessin, u.prenom, u.nom, u.surnom FROM post as p inner join utilisateur as u on p.id_utilisateur=u.id  ".$prepare);
+    $result = $db->query("SELECT p.titre, p.dessin, u.prenom, u.nom, u.surnom FROM post p inner join utilisateur u on p.id_utilisateur=u.id  ".$prepare);
     echo '<table>
   <tr>
     <td>artiste</td>
@@ -89,7 +89,8 @@ if (isset($_GET["rechercher"])){
         <tr>
             <td><?php echo $image['prenom']." ".$image['nom']." ".$image['surnom']; ?></td>
             <td><?php echo $image['titre']; ?></td>
-            <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $image['dessin'] ).'" width=200 height=auto'; ?></td>
+            <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($image['dessin']).'" />'; ?></td>
+           <?php echo '<img src="data:image/jpeg;base64,'.base64_encode($image['dessin']).'"/>'; ?>
         </tr>
         <?php
     }

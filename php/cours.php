@@ -34,7 +34,7 @@ session_start();
 <div class="formulaire">
     <form>
         <h2>Cours</h2>
-        <label for="cour">cour : </label>
+        <label for="cour">Cours : </label>
         <select name="cour" id="cour">
             <option value="">tout</option>
 
@@ -49,10 +49,10 @@ session_start();
 
         </select>
         <label>
-            date : <input class="date" type="date" name="date_cour" id="date_cour" value="*" min="<?= date('Y-m-d'); ?>">
+            Date : <input class="date" type="date" name="date_cour" id="date_cour" value="*" min="<?= date('Y-m-d'); ?>">
         </label>
 
-        <label for="heure_cour">heure </label>
+        <label for="heure_cour">Heure </label>
         <select name="heure_cour" id="heure_cour">
 
             <option value=""> </option>
@@ -271,8 +271,8 @@ if (isset($_GET["search"])) {
 
         echo "<form id='ajout_cour'>";
         echo $_GET["date_cour"] . " | " . $_GET["heure_cour"] . "H " . "<br>";
-        echo " salle: <input type='text' name='salle' required='required' form='ajout_cour'><br>";
-        echo "nombre d'élève: <input type='number' name='nb_place' required='required' form='ajout_cour'><br><br>";
+        echo " salle: <input class='texte' type='text' name='salle' required='required' form='ajout_cour'><br>";
+        echo "nombre d'élève: <input class='texte' type='number' name='nb_place' required='required' form='ajout_cour'><br><br>";
         echo "<input type='hidden' name='date' value=" . $_GET['date_cour'] . ">";
         echo "<input type='hidden' name='heure' value=" . $_GET['heure_cour'] . ">";
 
@@ -281,7 +281,7 @@ if (isset($_GET["search"])) {
             $cour_nom = $req_cour_nom->fetch();
             echo $cour_nom["nom"] . "   " . $_GET["date_cour"] . "   "
                 . $_GET["heure_cour"] . "H";
-            echo "<button type='submit' name='ajout_cour' form='ajout_cour' value='" . $cour["id"] . "'>creer</button><br>";
+            echo "<button class='bouton_rejoindre' type='submit' name='ajout_cour' form='ajout_cour' value='" . $cour["id"] . "'>creer</button><br>";
         }
         echo "</form>";
     }

@@ -17,9 +17,10 @@ $subject = "Demande:\t$demande\n";
 
 
 if(mail($recipient, $subject, $msg)){
-    echo "c bon";
+    echo "Email envoyé !";
 }else{
-    echo "c pas bon";
-}
+    echo "Erreur, le mail ne s'est pas envoyé";
 
+}
+echo '<a href="index.php"> Retour au menu principal </a>';
 ?>

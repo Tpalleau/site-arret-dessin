@@ -33,20 +33,21 @@ session_start();
     </div>
 </nav>
 <div>
-    <h2>Postez vos dessins ici !</h2>
+
 </div>
-<div id="content">
+<div id="content" class="formulaire">
 
     <form method="POST"
           action=""
           enctype="multipart/form-data">
-        titre<input type="text" name="titre" required="required"><br>
+        <h2>Postez vos dessins ici !</h2>
+        Titre <input class="texte" type="text" name="titre" required="required"><br>
         <input type="file"
                name="uploadfile"
                value="" />
 
         <div>
-            <button type="submit"
+            <button class="submit" type="submit"
                     name="upload">
                 UPLOAD
             </button>
