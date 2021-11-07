@@ -23,6 +23,7 @@ session_start();
                     }else{ ?>
                         <li> <a href="connexion_output.php?connect=false">Deconnnexion</a> </li>
                         <li> <a href="dessins.php">Dessins</a> </li>
+                        <li> <a href="modification.php">Modifier son Compte</a> </li>
                         <?php
                     } ?>
                     <li> <a href="cours.php">Cours</a> </li>
