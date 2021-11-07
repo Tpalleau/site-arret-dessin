@@ -75,7 +75,7 @@ if (isset($_GET["rechercher"])){
             $prepare=$prepare." id_utilisateur=".$_GET["utilisateur"];
         }
     }
-    $result = $db->query("SELECT * FROM post ".$prepare);
+    $result = $db->query("SELECT p.titre, p.dessin, u.prenom, u.nom, u.surnom FROM post as p inner join utilisateur as u on p.id_utilisateur=u.id  ".$prepare);
     echo '<table>
   <tr>
     <td>artiste</td>
@@ -87,9 +87,9 @@ if (isset($_GET["rechercher"])){
 
         ?>
         <tr>
-            <td><?php echo $image['numero_post']; ?></td>
+            <td><?php echo $image['prenom']." ".$image['nom']." ".$image['surnom']; ?></td>
             <td><?php echo $image['titre']; ?></td>
-            <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $image['dessin'] ).'"/>'; ?>
+            <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $image['dessin'] ).'" width=200 height=auto'; ?></td>
         </tr>
         <?php
     }
