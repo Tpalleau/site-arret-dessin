@@ -6,6 +6,7 @@ Dans le .zip, vous trouverez :
 -un dossier sql, comprenant la base de données
 -un document word, le rapport présentant le projet (dont le diagramme)
 -ce document README, expliquant comment utiliser le site et la base de données
+-un document mise_en_place_xampp, voir dans ce fichier son utilité
 
 ------------------------------------------------------------------------------------------
 
